@@ -9,6 +9,9 @@ class QLite extends DB
 {
 
     private $qc;
+    private $query;
+    private $where;
+    private $pData;
 
     public function __construct($dbhost, $dbname, $dbuser, $dbpass)
     {
@@ -21,7 +24,7 @@ class QLite extends DB
     }
 
 
-    /**
+  /**
      * Create a table 
      * @param $tablename String 
      * @param $columns Array
@@ -54,26 +57,106 @@ class QLite extends DB
 
 
     /**
-     * Selectng data from a table
+     * General query method, allowing plain SQL
      */
-    public function select($tableName, $columns, $limit)
-    {
+    public function q($q){
+        
+        $this->query = $q;
 
-        $cols = $this->get_columns($columns, false);
-
-        $query = "SELECT ". $cols ." FROM ". $tableName ." LIMIT " . $limit;
-
-        dd($query);
-
-        try{
-            return $this->qc->query($query)->fetch();
-        }   catch (PDOException $e) {
-            return $e->getMessage();
-        }
-
+        if (strpos($q, 'select') !== false || strpos($q, 'SELECT') !== false )
+            return $this->qc->query($this->query)->fetchAll();
+    
+        return $this->query->exec();
 
     }
 
+
+    /**
+     * Selectng data from a table
+     * @param $field 
+     * @param $table
+     */
+    public function select($field, $table)
+    {
+
+        $this->query = "SELECT " . $field . " FROM " . $table;
+
+        return $this;
+
+    }
+
+
+    /**
+     * SQL Where
+     * Appends the query with a where clause 
+     */
+    public function where($field, $operator, $comparison)
+    {
+        
+        $stringStart = " WHERE ";
+
+        if($this->where)
+            $stringStart = " AND ";
+
+        $this->query .= $stringStart . $field . " " . $operator . " '" . $comparison . "'"; 
+
+        $this->where = true;
+
+        return $this;
+
+    }
+
+
+    /**
+     * SQL Order
+     * Appends the query with an order clause
+     */
+    public function order($field, $direction)
+    {
+
+        $this->query .= " ORDER BY " . $field . " " . $direction;
+
+        return $this;
+
+    }
+
+
+    /**
+     * SQL Limit
+     * Appends the query with a limit clause
+     * 
+     * @param $limit
+     * @param $offset = 0
+     * 
+     */
+    public function limit($limit, $offset = 0)
+    {
+
+        // -1 is no limit
+        if($limit != -1) {
+
+            $this->query .= " LIMIT " . $limit;
+
+            if($offset != 0)
+                $this->query .= " OFFSET " . $offset;
+    
+        }
+
+        return $this;
+
+    }
+
+
+    /**
+     * Get
+     * Executes the sql query 
+     */
+    public function get()
+    {
+        
+        return $this->qc->query($this->query)->fetch();
+
+    }
 
     /**
      * Inserting data into a table
@@ -94,6 +177,57 @@ class QLite extends DB
             return $e->getMessage();
         }
 
+    }
+
+
+    /**
+     * Update method
+     */
+    public function update($tableName, $data)
+    {
+
+        $this->pData = $data;
+        $arrKeys = array_keys($data);
+        $set = "";
+
+        foreach($arrKeys as $d){
+            $set .= $d . "=?,";
+        }
+
+        $this->query = "UPDATE " . $tableName . " SET " . rtrim($set, ",");
+
+        return $this;
+
+    }
+
+
+    /**
+     * Delete method
+     */
+    public function delete($tableName, $data)
+    {
+
+        $this->pData = $data;
+        $arrKeys = array_keys($data);
+        $set = "";
+
+        foreach($arrKeys as $d){
+            $set .= $d . "=?,";
+        }
+
+        $this->query = "DELETE FROM ". $tableName ." WHERE " . rtrim($set, ",");        
+        
+        return $this;
+        
+    }
+
+
+    /**
+     * PDO execute method
+     */
+    public function exec()
+    {
+        return $this->qc->prepare($this->query)->execute(array_values($this->pData));
     }
 
 
