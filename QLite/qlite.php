@@ -3,7 +3,13 @@
  * QLite is a simple class used to interact with the database
  * @version 0.1
  */
+namespace QLite;
 
+
+require("database.php");
+
+use \PDO;
+use \PDOException;
 
 class QLite extends DB
 {

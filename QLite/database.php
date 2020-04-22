@@ -1,5 +1,12 @@
 <?php 
+/**
+ * Database connection class
+ */
+namespace QLite;
 
+
+use \PDO;
+use \PDOException;
 
 class DB {
 
