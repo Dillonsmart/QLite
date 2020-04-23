@@ -1,8 +1,10 @@
 <?php 
 /**
- * QLite is a simple class used to interact with the database
- * @version 0.1
+ * QLite is a simple class used to interact with the database - https://github.com/Dillonsmart/QLite
+ * @author  Author: Dillon Smart. (https://twitter.com/dillon_smart)
+ * @version 0.4
  */
+
 namespace QLite;
 
 
