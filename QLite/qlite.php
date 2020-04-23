@@ -33,7 +33,6 @@ class QLite extends DB
   /**
      * Create a table 
      * @param $tablename String 
-     * @param $columns Array
      */
     public function create_table($tableName)
     {
@@ -47,7 +46,7 @@ class QLite extends DB
     /**
      * Create table column
      *
-     * @param [type] $name
+     * @param string $name
      * @return void
      */
     public function column($name)
@@ -62,7 +61,7 @@ class QLite extends DB
     /**
      * Column datatype int
      *
-     * @param [type] $length
+     * @param integer $length
      * @return void
      */
     public function integer($length)
@@ -75,9 +74,24 @@ class QLite extends DB
 
 
     /**
+     * Column float datatype
+     *
+     * @param integer $length
+     * @param float $decimal
+     * @return void
+     */
+    public function float($length, $decimal)
+    {
+        $this->query .= "FLOAT(" . $length .", ". $decimal .") ";
+
+        return $this;
+    }
+
+
+    /**
      * Column datatype string
      *
-     * @param [type] $length
+     * @param integer $length
      * @return void
      */
     public function string($length)
@@ -92,7 +106,7 @@ class QLite extends DB
     /**
      * Column datatype text
      *
-     * @param [type] $length
+     * @param integer $length
      * @return void
      */
     public function text($length)
@@ -119,6 +133,58 @@ class QLite extends DB
 
 
     /**
+     * Column datatype date
+     *
+     * @return void
+     */
+    public function date()
+    {
+        $this->query .= "DATE ";
+
+        return $this;
+    }
+
+
+    /**
+     * Column datatype datetime
+     *
+     * @return void
+     */
+    public function datetime()
+    {
+        $this->query .= "DATETIME ";
+
+        return $this;
+    }
+
+
+    /**
+     * Column datatype time
+     *
+     * @return void
+     */
+    public function time()
+    {
+        $this->query .= "TIME ";
+
+        return $this;
+    }
+
+
+    /**
+     * Column datatype year
+     *
+     * @return void
+     */
+    public function year()
+    {
+        $this->query .= "YEAR ";
+
+        return $this;
+    }
+
+
+    /**
      * Column nullable state 
      *
      * @param integer $state
@@ -141,7 +207,7 @@ class QLite extends DB
     /**
      * Set the column to be a primary key
      *
-     * @param [type] $columnName
+     * @param string $columnName
      * @return void
      */
     public function primary($columnName)
