@@ -35,29 +35,148 @@ class QLite extends DB
      * @param $tablename String 
      * @param $columns Array
      */
-    public function create_table($tableName, $columns = null)
+    public function create_table($tableName)
+    {
+        $this->query = "CREATE TABLE IF NOT EXISTS ". $tableName ." (";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Create table column
+     *
+     * @param [type] $name
+     * @return void
+     */
+    public function column($name)
+    {
+        $this->query .= $name . " ";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Column datatype int
+     *
+     * @param [type] $length
+     * @return void
+     */
+    public function integer($length)
+    {
+        $this->query .= "INT(" . $length . ") ";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Column datatype string
+     *
+     * @param [type] $length
+     * @return void
+     */
+    public function string($length)
+    {
+        $this->query .= "VARCHAR(" . $length . ") ";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Column datatype text
+     *
+     * @param [type] $length
+     * @return void
+     */
+    public function text($length)
+    {
+        $this->query .= "TEXT(" . $length . ") ";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Column datatype boolean
+     *
+     * @return void
+     */
+    public function boolean()
+    {
+        $this->query .= "BOOLEAN ";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Column nullable state 
+     *
+     * @param integer $state
+     * @return void
+     */
+    public function null($state = 0)
     {
 
-        $query = "CREATE TABLE IF NOT EXISTS ". $tableName ." (";
-        $primary = "";
-
-        foreach($columns as $col) {
-            $query .= $col['name'] . " " . $col['datatype'] . " " . $col['att'] . ",";
-
-            if($col['pk']){
-                $primary = "PRIMARY KEY(".$col['name']."))";
-            }
-
+        if($state){
+            $this->query .= " NULL, ";
+        } else {
+            $this->query .= " NOT NULL, ";
         }
 
-        $query .= $primary;
-        $query .= "CHARACTER SET utf8 COLLATE utf8_general_ci";
+        return $this;
 
-        try{
-            return $this->qc->exec($query);
-        }   catch (PDOException $e) {
-            return $e->getMessage();
-        }
+    }
+
+
+    /**
+     * Set the column to be a primary key
+     *
+     * @param [type] $columnName
+     * @return void
+     */
+    public function primary($columnName)
+    {
+        $this->query .= "PRIMARY KEY(". $columnName .")) ";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Set the tables character set and collate 
+     *
+     * @param string $charset
+     * @param string $collate
+     * @return void
+     */
+    public function charcoll($charset = "utf8", $collate = "utf8_general_ci")
+    {
+        $this->query .= "CHARACTER SET ". $charset ." COLLATE " . $collate;
+
+        return $this;
+
+    }
+
+
+    /**
+     * The QLite execution method
+     *
+     * @return void
+     */
+    public function go()
+    {
+        return $this->qc->exec($this->query);
 
     }
 
