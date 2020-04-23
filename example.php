@@ -4,28 +4,31 @@ require('QLite/qlite.php');
 
 use QLite\QLite;
 
+// Creating a new connection
 $cfdb = new QLite('localhost', 'qlite', 'qlite', 'qlite');
 
-$cfdb->create_table(
-    'ql_example',
+// Creating a new database table
+$cfdb->create_table('test_table')
+    ->column('id')->integer(11)->null(0)
+    ->column('name')->string(256)->null(0)
+    ->column('company')->string(256)->null(1)
+    ->primary('id')
+    ->charcoll()
+    ->go();
+    
+// Inserting test data
+$cfdb->insert(
+    'test_table', 
     array(
-        array(
-            'name'     => 'id',                      
-            'datatype' => 'INT',                     
-            'att'      => 'AUTO_INCREMENT NOT NULL', 
-            'pk'       => true                       
-        ),
-        array(
-            'name'     => 'name',
-            'datatype' => 'VARCHAR(24)', 
-            'att'      => 'NOT NULL',
-            'pk'       => false
-        ),
-        array(
-            'name'     => 'age',
-            'datatype' => 'INT',
-            'att'      => 'NOT NULL',
-            'pk'       => false
-        )
+        'name'    => 'John Doe',
+        'company' => 'Example Company'
     )
 );
+
+// Selecting the data 
+$data = $cfdb->select('*', 'test_table')
+             ->where('name', '=', 'John Doe')
+             ->where('id', '=', 1)
+             ->get();
+
+print_r($data);            

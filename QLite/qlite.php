@@ -1,8 +1,10 @@
 <?php 
 /**
- * QLite is a simple class used to interact with the database
- * @version 0.1
+ * QLite is a simple class used to interact with the database - https://github.com/Dillonsmart/QLite
+ * @author  Author: Dillon Smart. (https://twitter.com/dillon_smart)
+ * @version 0.4
  */
+
 namespace QLite;
 
 
@@ -33,31 +35,216 @@ class QLite extends DB
   /**
      * Create a table 
      * @param $tablename String 
-     * @param $columns Array
      */
-    public function create_table($tableName, $columns = null)
+    public function create_table($tableName)
+    {
+        $this->query = "CREATE TABLE IF NOT EXISTS ". $tableName ." (";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Create table column
+     *
+     * @param string $name
+     * @return void
+     */
+    public function column($name)
+    {
+        $this->query .= $name . " ";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Column datatype int
+     *
+     * @param integer $length
+     * @return void
+     */
+    public function integer($length)
+    {
+        $this->query .= "INT(" . $length . ") ";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Column float datatype
+     *
+     * @param integer $length
+     * @param float $decimal
+     * @return void
+     */
+    public function float($length, $decimal)
+    {
+        $this->query .= "FLOAT(" . $length .", ". $decimal .") ";
+
+        return $this;
+    }
+
+
+    /**
+     * Column datatype string
+     *
+     * @param integer $length
+     * @return void
+     */
+    public function string($length)
+    {
+        $this->query .= "VARCHAR(" . $length . ") ";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Column datatype text
+     *
+     * @param integer $length
+     * @return void
+     */
+    public function text($length)
+    {
+        $this->query .= "TEXT(" . $length . ") ";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Column datatype boolean
+     *
+     * @return void
+     */
+    public function boolean()
+    {
+        $this->query .= "BOOLEAN ";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Column datatype date
+     *
+     * @return void
+     */
+    public function date()
+    {
+        $this->query .= "DATE ";
+
+        return $this;
+    }
+
+
+    /**
+     * Column datatype datetime
+     *
+     * @return void
+     */
+    public function datetime()
+    {
+        $this->query .= "DATETIME ";
+
+        return $this;
+    }
+
+
+    /**
+     * Column datatype time
+     *
+     * @return void
+     */
+    public function time()
+    {
+        $this->query .= "TIME ";
+
+        return $this;
+    }
+
+
+    /**
+     * Column datatype year
+     *
+     * @return void
+     */
+    public function year()
+    {
+        $this->query .= "YEAR ";
+
+        return $this;
+    }
+
+
+    /**
+     * Column nullable state 
+     *
+     * @param integer $state
+     * @return void
+     */
+    public function null($state = 0)
     {
 
-        $query = "CREATE TABLE IF NOT EXISTS ". $tableName ." (";
-        $primary = "";
-
-        foreach($columns as $col) {
-            $query .= $col['name'] . " " . $col['datatype'] . " " . $col['att'] . ",";
-
-            if($col['pk']){
-                $primary = "PRIMARY KEY(".$col['name']."))";
-            }
-
+        if($state){
+            $this->query .= " NULL, ";
+        } else {
+            $this->query .= " NOT NULL, ";
         }
 
-        $query .= $primary;
-        $query .= "CHARACTER SET utf8 COLLATE utf8_general_ci";
+        return $this;
 
-        try{
-            return $this->qc->exec($query);
-        }   catch (PDOException $e) {
-            return $e->getMessage();
-        }
+    }
+
+
+    /**
+     * Set the column to be a primary key
+     *
+     * @param string $columnName
+     * @return void
+     */
+    public function primary($columnName)
+    {
+        $this->query .= "PRIMARY KEY(". $columnName .")) ";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Set the tables character set and collate 
+     *
+     * @param string $charset
+     * @param string $collate
+     * @return void
+     */
+    public function charcoll($charset = "utf8", $collate = "utf8_general_ci")
+    {
+        $this->query .= "CHARACTER SET ". $charset ." COLLATE " . $collate;
+
+        return $this;
+
+    }
+
+
+    /**
+     * The QLite execution method
+     *
+     * @return void
+     */
+    public function go()
+    {
+        return $this->qc->exec($this->query);
 
     }
 
