@@ -228,7 +228,25 @@ class QLite extends DB
      */
     public function primary($columnName)
     {
-        $this->query .= "PRIMARY KEY(". $columnName .")) ";
+        $this->query .= "PRIMARY KEY(". $columnName .") ";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Adding a foreign key to a table
+     *
+     * @param string $columnName
+     * @param string $refTable
+     * @param string $refColumn
+     * @return void
+     */
+    public function foriegn($columnName, $refTable, $refColumn)
+    {
+
+        $this->query .= ", FOREIGN KEY (". $columnName .") REFERENCES ". $refTable ."(". $refColumn .") ";
 
         return $this;
 
@@ -244,7 +262,7 @@ class QLite extends DB
      */
     public function charcoll($charset = "utf8", $collate = "utf8_general_ci")
     {
-        $this->query .= "CHARACTER SET ". $charset ." COLLATE " . $collate;
+        $this->query .= ") CHARACTER SET ". $charset ." COLLATE " . $collate;
 
         return $this;
 
@@ -258,6 +276,9 @@ class QLite extends DB
      */
     public function go()
     {
+
+        return print_r($this->query);
+
         return $this->qc->exec($this->query);
 
     }
