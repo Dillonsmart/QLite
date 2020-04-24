@@ -187,6 +187,20 @@ class QLite extends DB
 
 
     /**
+     * Column datatype blob
+     *
+     * @param integer $length
+     * @return void
+     */
+    public function blob($length)
+    {
+        $this->query .= "BLOB(" . $length . ") ";
+
+        return $this;
+    }
+
+
+    /**
      * Column nullable state 
      *
      * @param integer $state
