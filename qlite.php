@@ -2,7 +2,7 @@
 /**
  * QLite is a simple class used to interact with the database - https://github.com/Dillonsmart/QLite
  * @author  Author: Dillon Smart. (https://twitter.com/dillon_smart)
- * @version 0.4
+ * @version 0.5
  */
 
 namespace QLite;
@@ -57,6 +57,19 @@ class QLite extends DB
 
         return $this;
 
+    }
+
+
+    /**
+     * Auto Increment field
+     *
+     * @return void
+     */
+    public function auto()
+    {
+        $this->query .= "AUTO_INCREMENT ";
+
+        return $this;
     }
 
 
@@ -187,6 +200,20 @@ class QLite extends DB
 
 
     /**
+     * Column datatype blob
+     *
+     * @param integer $length
+     * @return void
+     */
+    public function blob($length)
+    {
+        $this->query .= "BLOB(" . $length . ") ";
+
+        return $this;
+    }
+
+
+    /**
      * Column nullable state 
      *
      * @param integer $state
@@ -214,7 +241,25 @@ class QLite extends DB
      */
     public function primary($columnName)
     {
-        $this->query .= "PRIMARY KEY(". $columnName .")) ";
+        $this->query .= "PRIMARY KEY(". $columnName .") ";
+
+        return $this;
+
+    }
+
+
+    /**
+     * Adding a foreign key to a table
+     *
+     * @param string $columnName
+     * @param string $refTable
+     * @param string $refColumn
+     * @return void
+     */
+    public function foreign($columnName, $refTable, $refColumn)
+    {
+
+        $this->query .= ", FOREIGN KEY (". $columnName .") REFERENCES ". $refTable ."(". $refColumn .") ";
 
         return $this;
 
@@ -230,7 +275,7 @@ class QLite extends DB
      */
     public function charcoll($charset = "utf8", $collate = "utf8_general_ci")
     {
-        $this->query .= "CHARACTER SET ". $charset ." COLLATE " . $collate;
+        $this->query .= ") CHARACTER SET ". $charset ." COLLATE " . $collate;
 
         return $this;
 
@@ -244,6 +289,7 @@ class QLite extends DB
      */
     public function go()
     {
+
         return $this->qc->exec($this->query);
 
     }
@@ -420,6 +466,7 @@ class QLite extends DB
      */
     public function exec()
     {
+
         return $this->qc->prepare($this->query)->execute(array_values($this->pData));
     }
 
