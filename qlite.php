@@ -243,7 +243,7 @@ class QLite extends DB
      * @param string $refColumn
      * @return void
      */
-    public function foriegn($columnName, $refTable, $refColumn)
+    public function foreign($columnName, $refTable, $refColumn)
     {
 
         $this->query .= ", FOREIGN KEY (". $columnName .") REFERENCES ". $refTable ."(". $refColumn .") ";
@@ -276,8 +276,6 @@ class QLite extends DB
      */
     public function go()
     {
-
-        return print_r($this->query);
 
         return $this->qc->exec($this->query);
 
@@ -395,15 +393,11 @@ class QLite extends DB
         $columns = $this->get_columns($data);
         $keys = $this->get_keys($data);
 
-        $query = "INSERT INTO ". $tableName ." (". $columns .") VALUES (". $keys .")";
+        $this->pData = $data;
 
-        $stmt = $this->qc->prepare($query);
+        $this->query = "INSERT INTO ". $tableName ." (". $columns .") VALUES (". $keys .")";
 
-        try{
-            return $stmt->execute($data);
-        }   catch (PDOException $e) {
-            return $e->getMessage();
-        }
+        return $this->exec();
 
     }
 
@@ -455,6 +449,7 @@ class QLite extends DB
      */
     public function exec()
     {
+
         return $this->qc->prepare($this->query)->execute(array_values($this->pData));
     }
 
