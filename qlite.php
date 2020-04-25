@@ -61,6 +61,19 @@ class QLite extends DB
 
 
     /**
+     * Auto Increment field
+     *
+     * @return void
+     */
+    public function auto()
+    {
+        $this->query .= "AUTO_INCREMENT ";
+
+        return $this;
+    }
+
+
+    /**
      * Column datatype int
      *
      * @param integer $length
