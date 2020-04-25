@@ -1,8 +1,8 @@
 <?php
 
-require('QLite/qlite.php');
+require('qlite.php');
 
-use QLite\QLite;
+use QLite;
 
 // Creating a new connection
 $cfdb = new QLite('localhost', 'qlite', 'qlite', 'qlite');
