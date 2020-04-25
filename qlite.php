@@ -38,7 +38,7 @@ class QLite extends DB
     /**
      * The post data 
      *
-     * @var string
+     * @var array
      */
     private $pData;
 
