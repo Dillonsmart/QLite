@@ -524,6 +524,17 @@ class QLite extends DB
 
 
     /**
+     * Return the last insert ID
+     *
+     * @return void
+     */
+    public function last_insert()
+    {
+        return $this->qc->lastInsertId();
+    }
+
+
+    /**
      * Check the columns string used in queries for prepared statements
      */
     private function get_columns($data, $values = true){
