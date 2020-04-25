@@ -393,11 +393,15 @@ class QLite extends DB
         $columns = $this->get_columns($data);
         $keys = $this->get_keys($data);
 
-        $this->pData = $data;
+        $query = "INSERT INTO ". $tableName ." (". $columns .") VALUES (". $keys .")";
 
-        $this->query = "INSERT INTO ". $tableName ." (". $columns .") VALUES (". $keys .")";
+        $stmt = $this->qc->prepare($query);
 
-        return $this->exec();
+        try{
+            return $stmt->execute($data);
+        }   catch (PDOException $e) {
+            return $e->getMessage();
+        }
 
     }
 
