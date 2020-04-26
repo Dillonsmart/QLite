@@ -306,6 +306,31 @@ class QLite extends DB
 
 
     /**
+     * Add timestamp fields to table
+     *
+     * @return void
+     */
+    public function timestamps()
+    {
+
+        $this->query .= $this->column('created_at')->datetime()->null(1);
+        $this->query .= $this->column('updated_at')->datetime()->null(1);
+
+    }
+
+
+    /**
+     * Add softdelete deleted_at field to table
+     *
+     * @return void
+     */
+    public function softdeletes()
+    {
+        $this->query .= $this->column('deleted_at')->datetime()->null(1);
+    }
+
+
+    /**
      * The QLite execution method
      *
      * @return void
