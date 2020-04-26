@@ -378,10 +378,15 @@ class QLite extends DB
      * @param string $table
      * @return void
      */
-    public function select($field, $table)
+    public function select($field, $table, $includeSoftDeletes = null)
     {
 
-        $this->query = "SELECT " . $field . " FROM " . $table;
+        if($includeSoftDeletes){
+            $this->query = "SELECT " . $field . " FROM " . $table;
+        } else {
+            $this->query = "SELECT " . $field . " FROM " . $table . " WHERE deleted_at = null";
+            $this->where - true;
+        }
 
         return $this;
 
