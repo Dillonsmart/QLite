@@ -43,6 +43,14 @@ class QLite extends DB
     private $pData;
 
 
+    /**
+     * Foreign key constraints 
+     *
+     * @var [type]
+     */
+    private $foreignKeys;
+
+
     public function __construct($dbhost, $dbname, $dbuser, $dbpass)
     {
 
@@ -282,7 +290,7 @@ class QLite extends DB
     public function foreign($columnName, $refTable, $refColumn)
     {
 
-        $this->query .= ", FOREIGN KEY (". $columnName .") REFERENCES ". $refTable ."(". $refColumn .") ";
+        $this->foreign .= ", FOREIGN KEY (". $columnName .") REFERENCES ". $refTable ."(". $refColumn .") ";
 
         return $this;
 
@@ -327,6 +335,8 @@ class QLite extends DB
     public function softdeletes()
     {
         $this->query .= $this->column('deleted_at')->datetime()->null(1);
+        $this->query .= $this->column('deleted_by')->integer(11)->null(1);
+        $this->foreign .= $this->foreign('deleted_by', 'users', 'id');
     }
 
 
