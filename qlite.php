@@ -290,7 +290,9 @@ class QLite extends DB
     public function foreign($columnName, $refTable, $refColumn)
     {
 
-        $this->foreign .= ", FOREIGN KEY (". $columnName .") REFERENCES ". $refTable ."(". $refColumn .") ";
+        $this->foreignKeys .= ", FOREIGN KEY (". $columnName .") REFERENCES ". $refTable ."(". $refColumn .") ";
+
+        $this->query .= $this->foreignKeys;
 
         return $this;
 
@@ -321,8 +323,10 @@ class QLite extends DB
     public function timestamps()
     {
 
-        $this->query .= $this->column('created_at')->datetime()->null(1);
-        $this->query .= $this->column('updated_at')->datetime()->null(1);
+        $this->column('created_at')->datetime()->null(1);
+        $this->column('updated_at')->datetime()->null(1);
+
+        return $this;
 
     }
 
@@ -334,9 +338,12 @@ class QLite extends DB
      */
     public function softdeletes()
     {
-        $this->query .= $this->column('deleted_at')->datetime()->null(1);
-        $this->query .= $this->column('deleted_by')->integer(11)->null(1);
-        $this->foreign .= $this->foreign('deleted_by', 'users', 'id');
+        $this->column('deleted_at')->datetime()->null(1);
+        $this->column('deleted_by')->integer(11)->null(1);
+        $this->foreignKeys .= ", FOREIGN KEY (deleted_by) REFERENCES users(id) ";
+
+        return $this;
+
     }
 
 
@@ -384,7 +391,7 @@ class QLite extends DB
         if($includeSoftDeletes){
             $this->query = "SELECT " . $field . " FROM " . $table;
         } else {
-            $this->query = "SELECT " . $field . " FROM " . $table . " WHERE deleted_at = null";
+            $this->query = "SELECT " . $field . " FROM " . $table . " WHERE deleted_at IS NULL";
             $this->where - true;
         }
 
@@ -469,8 +476,8 @@ class QLite extends DB
      */
     public function get()
     {
-        
-        return $this->qc->query($this->query)->fetch();
+
+        return $this->qc->query($this->query)->fetchAll();
 
     }
 
@@ -491,6 +498,8 @@ class QLite extends DB
         $query = "INSERT INTO ". $tableName ." (". $columns .") VALUES (". $keys .")";
 
         $stmt = $this->qc->prepare($query);
+
+        print_r('<pre>' . print_r($query) . '</pre>');
 
         try{
             return $stmt->execute($data);
