@@ -16,10 +16,32 @@ use \PDOException;
 class QLite extends DB
 {
 
+    /**
+     * Connection with the database 
+     */
     private $qc;
+
+    /**
+     * The query string which will be executed
+     *
+     * @var string
+     */
     private $query;
+    
+    /**
+     * Where clause string
+     *
+     * @var string 
+     */
     private $where;
+
+    /**
+     * The post data 
+     *
+     * @var array
+     */
     private $pData;
+
 
     public function __construct($dbhost, $dbname, $dbuser, $dbpass)
     {
@@ -34,6 +56,7 @@ class QLite extends DB
 
   /**
      * Create a table 
+     * 
      * @param $tablename String 
      */
     public function create_table($tableName)
@@ -296,7 +319,10 @@ class QLite extends DB
 
 
     /**
-     * General query method, allowing plain SQL
+     * The general query method
+     *
+     * @param string $q - the sql query to be executed 
+     * @return void
      */
     public function q($q){
         
@@ -311,9 +337,11 @@ class QLite extends DB
 
 
     /**
-     * Selectng data from a table
-     * @param $field 
-     * @param $table
+     * Select method 
+     *
+     * @param string $field
+     * @param string $table
+     * @return void
      */
     public function select($field, $table)
     {
@@ -326,8 +354,12 @@ class QLite extends DB
 
 
     /**
-     * SQL Where
-     * Appends the query with a where clause 
+     * Where method 
+     *
+     * @param string $field
+     * @param string $operator
+     * @param string $comparison
+     * @return void
      */
     public function where($field, $operator, $comparison)
     {
@@ -347,8 +379,11 @@ class QLite extends DB
 
 
     /**
-     * SQL Order
-     * Appends the query with an order clause
+     * Order results method
+     *
+     * @param string $field
+     * @param string $direction
+     * @return void
      */
     public function order($field, $direction)
     {
@@ -361,12 +396,11 @@ class QLite extends DB
 
 
     /**
-     * SQL Limit
-     * Appends the query with a limit clause
-     * 
-     * @param $limit
-     * @param $offset = 0
-     * 
+     * Limit method
+     *
+     * @param integer $limit
+     * @param integer $offset
+     * @return void
      */
     public function limit($limit, $offset = 0)
     {
@@ -387,8 +421,11 @@ class QLite extends DB
 
 
     /**
-     * Get
-     * Executes the sql query 
+     * Get method 
+     * Executes the query 
+     * Chained to the end of a select method 
+     *
+     * @return void
      */
     public function get()
     {
@@ -397,8 +434,13 @@ class QLite extends DB
 
     }
 
+
     /**
-     * Inserting data into a table
+     * Insert method
+     *
+     * @param string $tableName
+     * @param array $data
+     * @return void
      */
     public function insert($tableName, $data)
     {
@@ -421,6 +463,10 @@ class QLite extends DB
 
     /**
      * Update method
+     *
+     * @param string $tableName
+     * @param array $data
+     * @return void
      */
     public function update($tableName, $data)
     {
@@ -442,6 +488,10 @@ class QLite extends DB
 
     /**
      * Delete method
+     *
+     * @param string $tableName
+     * @param array $data
+     * @return void
      */
     public function delete($tableName, $data)
     {
@@ -462,12 +512,25 @@ class QLite extends DB
 
 
     /**
-     * PDO execute method
+     * Execution method
+     *
+     * @return void
      */
     public function exec()
     {
 
         return $this->qc->prepare($this->query)->execute(array_values($this->pData));
+    }
+
+
+    /**
+     * Return the last insert ID
+     *
+     * @return void
+     */
+    public function last_insert()
+    {
+        return $this->qc->lastInsertId();
     }
 
 

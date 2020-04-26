@@ -40,52 +40,52 @@ A full table creation example can be found below.
 
 #### Integer 
 ```
-->column('id')->integer( $length )->null(0) 
+column('id')->integer( $length )->null(0) 
 ```
 
 #### Float
 ```
-->column('amount')->float( $length , $decimal )->null(0) 
+column('amount')->float( $length , $decimal )->null(0) 
 ```
 
 #### String
 ```
-->column('name')->string( $length )->null(0) 
+column('name')->string( $length )->null(0) 
 ```
 
 #### Text
 ```
-->column('description')->text()->null(0) 
+column('description')->text()->null(0) 
 ```
 
 #### Boolean 
 ```
-->column('active')->boolean()->null(0)
+column('active')->boolean()->null(0)
 ```
 
 #### Date 
 ```
-->column('brithday')->date()->null(0)
+column('brithday')->date()->null(0)
 ```
 
 #### Datetime
 ```
-->column('created_at')->datetime()->null(0)
+column('created_at')->datetime()->null(0)
 ```
 
 #### Time
 ```
-->column('meeting_time')->time()->null(0)
+column('meeting_time')->time()->null(0)
 ```
 
 #### Year 
 ```
-->column('active_since')->year()->null(0)
+column('active_since')->year()->null(0)
 ```
 
 #### Blob 
 ```
-->column('ablob')->blob( $length )->null(0)
+column('ablob')->blob( $length )->null(0)
 ```
 
 ### Additional Methods 
