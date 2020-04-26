@@ -1,4 +1,4 @@
-# QLite v0.5 - PDO Class 
+# QLite v0.7 - PDO Class 
 
 QLite is a PHP PDO database class designed to make connections with a MySQL database efficient and clean. 
 
@@ -91,6 +91,19 @@ column('ablob')->blob( $length )->null(0)
 ### Additional Methods 
 The below methods are used to complete the creation of a table.
 
+### Timestamp fields 
+The method timestamps will add a created_at and updated_at field to your table.
+```
+timestamps()
+```
+
+### Softdeletes
+The softdeletes method will add deleted_at and deleted_by fields to your table. Softdeletes should only be used if your application also has a users table with a primary key of 'id'. 
+```
+softdeletes()
+```
+
+
 #### Null
 The null() method is appended to the column datatype methods and can be 0 or 1. 
 
@@ -148,10 +161,13 @@ $cfdb->create_table('addresses')
 
 ## SELECT 
 ```
-$cfdb->select(string $fields, string $table)->get();
+$cfdb->select(string $fields, string $table, boolean $includeSoftDeletes = null)->get();
 ```
+__If you application does not use softdeletes, you must set the $includeSoftDeletes param to true.__
+
+__As of version 1.0 the select method will have $includeSoftDeletes default set to true, so if your application does not use soft deletes, you will no longer need to set this parameter.__
 ```
-$cfdb->select('name, company', 'users')->get();
+$cfdb->select('name, company', 'users', true)->get();
 ```
 ### Adding a WHERE Clause
 
@@ -160,13 +176,13 @@ where(string $field, string $operator, string $comparison)
 ```
 
 ```
-$cfdb->select('*', 'users')
+$cfdb->select('*', 'users', true)
      ->where('name', '=', 'John Doe')
      ->get();
 ```
 Multiple WHERE clauses can be used by chaining together: 
 ```
-$cfdb->select('*', 'users')
+$cfdb->select('*', 'users', true)
      ->where('name', '=', 'John Doe')
      ->where('id', '!=', 1)
      ->get();
@@ -177,7 +193,7 @@ $cfdb->select('*', 'users')
 order(string $field, string $direction)
 ```
 ```
-$cfdb->select('*', 'users')
+$cfdb->select('*', 'users', true)
      ->order('id', 'DESC')
      ->get();
 ```
@@ -188,7 +204,7 @@ $cfdb->select('*', 'users')
 limit(int $limit, int $offset)
 ```
 ```
-$cfdb->select('*', 'users')
+$cfdb->select('*', 'users', true)
      ->limit(10, 0)
      ->get();
 ```
