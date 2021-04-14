@@ -8,48 +8,21 @@
 namespace QLite;
 
 
-require("database.php");
-
 use \PDO;
 use \PDOException;
 
 class QLite extends DB
 {
 
-    /**
-     * Connection with the database 
-     */
     private $qc;
-
-    /**
-     * The query string which will be executed
-     *
-     * @var string
-     */
+    private $type;
     private $query;
-    
-    /**
-     * Where clause string
-     *
-     * @var string 
-     */
     private $where;
-
-    /**
-     * The post data 
-     *
-     * @var array
-     */
     private $pData;
-
-
-    /**
-     * Foreign key constraints 
-     *
-     * @var [type]
-     */
     private $foreignKeys;
-
+    private $charset = 'utf8';
+    private $collate = 'utf8_general_ci';
+    private $primaryKey = 'id';
 
     public function __construct($dbhost, $dbname, $dbuser, $dbpass)
     {
@@ -69,6 +42,7 @@ class QLite extends DB
      */
     public function create_table($tableName)
     {
+        $this->type = 1;
         $this->query = "CREATE TABLE IF NOT EXISTS ". $tableName ." (";
 
         return $this;
@@ -272,6 +246,7 @@ class QLite extends DB
      */
     public function primary($columnName)
     {
+
         $this->query .= "PRIMARY KEY(". $columnName .") ";
 
         return $this;
@@ -354,6 +329,12 @@ class QLite extends DB
      */
     public function go()
     {
+
+        // creating a database table so set the table primary key, charset and collate
+        if($this->type === 1) {
+            $this->primary($this->primaryKey);
+            $this->charcoll($this->charset, $this->collate);
+        }
 
         return $this->qc->exec($this->query);
 
