@@ -2,7 +2,7 @@
 /**
  * QLite is a simple class used to interact with the database - https://github.com/Dillonsmart/QLite
  * @author  Author: Dillon Smart. (https://twitter.com/dillon_smart)
- * @version 0.7
+ * @version 1.0.0
  */
 
 namespace QLite;

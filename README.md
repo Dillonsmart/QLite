@@ -1,4 +1,4 @@
-# QLite v0.7 - PDO Class 
+# QLite v1.0.0 - PDO Class 
 
 QLite is a PHP PDO database class designed to make connections with a MySQL database efficient and clean. 
 
