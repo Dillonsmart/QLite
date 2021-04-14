@@ -1,8 +1,8 @@
 <?php 
 /**
- * QLite is a simple class used to interact with the database - https://github.com/Dillonsmart/QLite
+ * QLite is a simple class used to interact with a MySQL database - https://github.com/Dillonsmart/QLite
  * @author  Author: Dillon Smart. (https://twitter.com/dillon_smart)
- * @version 0.7
+ * @version 1.0.0
  */
 
 namespace QLite;
@@ -336,6 +336,8 @@ class QLite extends DB
             $this->charcoll($this->charset, $this->collate);
         }
 
+        $this->type = null; // reset the query type
+
         return $this->qc->exec($this->query);
 
     }
@@ -635,5 +637,7 @@ class QLite extends DB
         return $this->get();
 
     }
+
+
 
 }

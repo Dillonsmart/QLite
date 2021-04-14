@@ -9,16 +9,22 @@ require('QLite/qlite.php');
 
 use QLite\QLite;
 
-$cfdb = new QLite('db_host', 'db_name', 'db_user', 'db_password');
+$ql = new QLite('db_host', 'db_name', 'db_user', 'db_password');
+```
+
+## Simply query the database
+### Execute your own SQL query 
+```
+$ql->q("SELECT * FROM users");
 ```
 
 ## Creating Tables 
 ```
-$cfdb->create_table(string $tableName);
+$ql->create_table(string $tableName);
 ```
 
 ```
-$cfdb->create_table('users')
+$ql->create_table('users')
      ->go();
 ```
 
@@ -27,7 +33,7 @@ There are a number of functions which can be chained to the create_tables method
 ### Column
 Below is an example of an id column which auto increments. 
 ```
-$cfdb->create_table('users')
+$ql->create_table('users')
      ->column('id')->integer(11)->auto()->null(0)
      ->go();
 ```
@@ -111,40 +117,25 @@ The null() method is appended to the column datatype methods and can be 0 or 1.
 column('id')->integer(11)->null(0);
 ```
 
-#### Primary
-The primary() method is used to specify the primary key for the table and should be included in the query after all the table columns have been specified. 
-
-```
-primary('id')
-```
-
 #### Foreign 
 The foreign() method is used to specify a foriegn key within a table and should be included in the query after the primary key declaration. 
 ```
 foreign('user_id', 'users', 'id')
 ```
 
-#### Charcholl
-The charcholl() method is used to specify the tables character set and collate. This method should be the last in the query. 
-```
-charcoll('utf8', 'utf8_general_ci')
-```
-
 ### Creating a database table example 
 
 ```
 // Creating the users table 
-$cfdb->create_table('users')
+$ql->create_table('users')
     ->column('id')->integer(11)->auto()->null(0)
     ->column('name')->string(256)->null(0)
     ->column('company')->string(256)->null(1)
-    ->primary('id')
-    ->charcoll()
     ->go();
 
 
 // Creating the addresses table
-$cfdb->create_table('addresses')
+$ql->create_table('addresses')
     ->column('id')->integer(11)->auto()->null(0)
     ->column('user_id')->integer(11)->null(0)
     ->column('address_1')->string(256)->null(0)
@@ -152,22 +143,20 @@ $cfdb->create_table('addresses')
     ->column('address_3')->string(256)->null(1)
     ->column('town')->string(256)->null(0)
     ->column('postcode')->string(256)->null(0)
-    ->primary('id')
     ->foreign('user_id', 'users', 'id')
-    ->charcoll()
     ->go();        
 ```
 
 
 ## SELECT 
 ```
-$cfdb->select(string $fields, string $table, boolean $includeSoftDeletes = null)->get();
+$ql->select(string $fields, string $table, boolean $includeSoftDeletes = null)->get();
 ```
 __If you application does not use softdeletes, you must set the $includeSoftDeletes param to true.__
 
 __As of version 1.0 the select method will have $includeSoftDeletes default set to true, so if your application does not use soft deletes, you will no longer need to set this parameter.__
 ```
-$cfdb->select('name, company', 'users', true)->get();
+$ql->select('name, company', 'users', true)->get();
 ```
 ### Adding a WHERE Clause
 
@@ -176,13 +165,13 @@ where(string $field, string $operator, string $comparison)
 ```
 
 ```
-$cfdb->select('*', 'users', true)
+$ql->select('*', 'users', true)
      ->where('name', '=', 'John Doe')
      ->get();
 ```
 Multiple WHERE clauses can be used by chaining together: 
 ```
-$cfdb->select('*', 'users', true)
+$ql->select('*', 'users', true)
      ->where('name', '=', 'John Doe')
      ->where('id', '!=', 1)
      ->get();
@@ -193,7 +182,7 @@ $cfdb->select('*', 'users', true)
 order(string $field, string $direction)
 ```
 ```
-$cfdb->select('*', 'users', true)
+$ql->select('*', 'users', true)
      ->order('id', 'DESC')
      ->get();
 ```
@@ -204,18 +193,18 @@ $cfdb->select('*', 'users', true)
 limit(int $limit, int $offset)
 ```
 ```
-$cfdb->select('*', 'users', true)
+$ql->select('*', 'users', true)
      ->limit(10, 0)
      ->get();
 ```
 
 ## Inserting data into a table
 ```
-$cfdb->insert(string $tableName, array $data);
+$ql->insert(string $tableName, array $data);
 ```
 
 ```
-$cfdb->insert(
+$ql->insert(
     'users', 
     array(
         'name' => 'John Doe',
@@ -226,11 +215,11 @@ $cfdb->insert(
 
 ## Updating data in a table 
 ```
-$cfdb->update(string $tableName, array $data)->where(string $field, string $operator, string $comparison)->exec();
+$ql->update(string $tableName, array $data)->where(string $field, string $operator, string $comparison)->exec();
 ```
 
 ```
-$cfdb->update( 
+$ql->update( 
        'users', 
        array('company' => 'Google')
     )->where('id', '=', 1)
@@ -239,18 +228,9 @@ $cfdb->update(
 
 ## Deleting from a table 
 ```
-$cfdb->delete(string $tableName, array $data);
+$ql->delete(string $tableName, array $data);
 ```
 ```
-$cfdb->delete('users', array('id' => 1))
+$ql->delete('users', array('id' => 1))
      ->exec()
-```
-
-## General query method
-### Execute your own SQL query 
-```
-$cfdb->q(string $query);
-```
-```
-$cfdb->q("SELECT * FROM users");
 ```
