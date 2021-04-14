@@ -80,7 +80,7 @@ class QLite extends DB
      * Create table column
      *
      * @param string $name
-     * @return void
+     * @return object
      */
     public function column($name)
     {
@@ -643,6 +643,16 @@ class QLite extends DB
         }
 
         return $keys;
+    }
+
+
+    public function database_tables()
+    {
+
+        $this->query = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'qlite'";
+
+        return $this->get();
+
     }
 
 }
