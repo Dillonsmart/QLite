@@ -255,6 +255,22 @@ class QLite extends DB
 
 
     /**
+     * Make the column unique
+     *
+     * @param string $columnName
+     * @return void
+     */
+    public function unique($columnName)
+    {
+
+        $this->query .= "UNIQUE(". $columnName .") ";
+
+        return $this;
+
+    }
+
+
+    /**
      * Adding a foreign key to a table
      *
      * @param string $columnName
@@ -322,6 +338,18 @@ class QLite extends DB
     }
 
 
+    public function execute_query($query)
+    {
+
+        $q = $this->query;
+
+        $this->query = null;
+
+        return $this->qc->exec($q);
+
+    }
+
+
     /**
      * The QLite execution method
      *
@@ -338,7 +366,7 @@ class QLite extends DB
 
         $this->type = null; // reset the query type
 
-        return $this->qc->exec($this->query);
+        return $this->execute_query($this->query);
 
     }
 

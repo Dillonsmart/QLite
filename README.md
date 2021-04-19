@@ -131,6 +131,8 @@ $ql->create_table('users')
     ->column('id')->integer(11)->auto()->null(0)
     ->column('name')->string(256)->null(0)
     ->column('company')->string(256)->null(1)
+    ->unique('name')
+    ->primary('id')
     ->go();
 
 
@@ -144,6 +146,7 @@ $ql->create_table('addresses')
     ->column('town')->string(256)->null(0)
     ->column('postcode')->string(256)->null(0)
     ->foreign('user_id', 'users', 'id')
+    ->primary('id')
     ->go();        
 ```
 
