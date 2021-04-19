@@ -35,7 +35,14 @@ class QLite extends DB
     }
 
 
-  /**
+    public function dd($var)
+    {
+        echo '<pre>';
+        die(var_dump($var));
+        echo '</pre>';
+    }
+
+    /**
      * Create a table 
      * 
      * @param $tablename String 
@@ -263,7 +270,7 @@ class QLite extends DB
     public function unique($columnName)
     {
 
-        $this->query .= "UNIQUE(". $columnName .") ";
+        $this->query .= "UNIQUE(". $columnName ."), ";
 
         return $this;
 
@@ -281,7 +288,7 @@ class QLite extends DB
     public function foreign($columnName, $refTable, $refColumn)
     {
 
-        $this->foreignKeys .= ", FOREIGN KEY (". $columnName .") REFERENCES ". $refTable ."(". $refColumn .") ";
+        $this->foreignKeys .= "FOREIGN KEY (". $columnName .") REFERENCES ". $refTable ."(". $refColumn ."), ";
 
         $this->query .= $this->foreignKeys;
 
