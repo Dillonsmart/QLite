@@ -56,7 +56,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * Create table column
      *
@@ -71,7 +70,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * Auto Increment field
      *
@@ -83,7 +81,6 @@ class QLite extends DB
 
         return $this;
     }
-
 
     /**
      * Column datatype int
@@ -99,7 +96,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * Column float datatype
      *
@@ -113,7 +109,6 @@ class QLite extends DB
 
         return $this;
     }
-
 
     /**
      * Column datatype string
@@ -129,7 +124,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * Column datatype text
      *
@@ -144,7 +138,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * Column datatype boolean
      *
@@ -158,7 +151,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * Column datatype date
      *
@@ -170,7 +162,6 @@ class QLite extends DB
 
         return $this;
     }
-
 
     /**
      * Column datatype datetime
@@ -184,7 +175,6 @@ class QLite extends DB
         return $this;
     }
 
-
     /**
      * Column datatype time
      *
@@ -196,7 +186,6 @@ class QLite extends DB
 
         return $this;
     }
-
 
     /**
      * Column datatype year
@@ -210,7 +199,6 @@ class QLite extends DB
         return $this;
     }
 
-
     /**
      * Column datatype blob
      *
@@ -223,7 +211,6 @@ class QLite extends DB
 
         return $this;
     }
-
 
     /**
      * Column nullable state 
@@ -244,7 +231,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * Set the column to be a primary key
      *
@@ -260,7 +246,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * Make the column unique
      *
@@ -275,7 +260,6 @@ class QLite extends DB
         return $this;
 
     }
-
 
     /**
      * Adding a foreign key to a table
@@ -296,7 +280,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * Set the tables character set and collate 
      *
@@ -311,7 +294,6 @@ class QLite extends DB
         return $this;
 
     }
-
 
     /**
      * Add timestamp fields to table
@@ -328,7 +310,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * Add softdelete deleted_at field to table
      *
@@ -344,7 +325,12 @@ class QLite extends DB
 
     }
 
-
+    /**
+     * Execute the query before nulling the query string
+     *
+     * @param [type] $query
+     * @return void
+     */
     public function execute_query($query)
     {
 
@@ -355,7 +341,6 @@ class QLite extends DB
         return $this->qc->exec($q);
 
     }
-
 
     /**
      * The QLite execution method
@@ -377,7 +362,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * The general query method
      *
@@ -394,7 +378,6 @@ class QLite extends DB
         return $this->query->exec();
 
     }
-
 
     /**
      * Select method 
@@ -416,7 +399,6 @@ class QLite extends DB
         return $this;
 
     }
-
 
     /**
      * Where method 
@@ -442,7 +424,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * Order results method
      *
@@ -458,7 +439,6 @@ class QLite extends DB
         return $this;
 
     }
-
 
     /**
      * Limit method
@@ -484,7 +464,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * Get method 
      * Executes the query 
@@ -498,7 +477,6 @@ class QLite extends DB
         return $this->qc->query($this->query)->fetchAll();
 
     }
-
 
     /**
      * Insert method
@@ -527,7 +505,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * Update method
      *
@@ -551,7 +528,6 @@ class QLite extends DB
         return $this;
 
     }
-
 
     /**
      * Delete method
@@ -577,7 +553,6 @@ class QLite extends DB
         
     }
 
-
     /**
      * Execution method
      *
@@ -589,7 +564,6 @@ class QLite extends DB
         return $this->qc->prepare($this->query)->execute(array_values($this->pData));
     }
 
-
     /**
      * Return the last insert ID
      *
@@ -599,7 +573,6 @@ class QLite extends DB
     {
         return $this->qc->lastInsertId();
     }
-
 
     /**
      * Check the columns string used in queries for prepared statements
@@ -640,7 +613,6 @@ class QLite extends DB
 
     }
 
-
     /**
      * Check the keys string used in queries for prepared statements
      */
@@ -662,17 +634,5 @@ class QLite extends DB
 
         return $keys;
     }
-
-
-    public function database_tables()
-    {
-
-        $this->query = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'qlite'";
-
-        return $this->get();
-
-    }
-
-
 
 }
