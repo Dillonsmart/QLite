@@ -375,7 +375,11 @@ class QLite extends DB
         if (strpos($q, 'select') !== false || strpos($q, 'SELECT') !== false )
             return $this->qc->query($this->query)->fetchAll();
     
-        return $this->qc->query($this->query)->exec();
+        $executeQuery = $this->qc->query($this->query);
+
+        $this->query = "";
+
+        return $executeQuery;
 
     }
 
