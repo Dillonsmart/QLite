@@ -478,7 +478,12 @@ class QLite extends DB
     public function get()
     {
 
-        return $this->qc->query($this->query)->fetchAll();
+        $results = $this->qc->query($this->query)->fetchAll(PDO::FETCH_COLUMN);
+
+        $this->query = "";
+        $this->where = null;
+
+        return $results;
 
     }
 
